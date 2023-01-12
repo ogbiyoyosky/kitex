@@ -1,5 +1,6 @@
 package com.kitex.kitex.auth;
 
+import com.kitex.kitex.exception.UnAuthorizedException;
 import com.kitex.kitex.user.UserRepository;
 import com.kitex.kitex.user.entity.SecurityUser;
 import com.kitex.kitex.user.entity.User;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpStatusCodeException;
 
 import java.util.*;
 
@@ -26,6 +28,11 @@ public class JpaUserDetailsService implements UserDetailsService
     {
 
         Optional<User> user = userRepository.findByEmail(email);
+
+        System.out.println(user);
+        if(user.isEmpty()) {
+             throw new UnAuthorizedException("Account not found");
+        }
 
         List<String> roles = new ArrayList<>();
 

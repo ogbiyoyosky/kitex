@@ -20,7 +20,7 @@ public class DTO_factory {
                 user.getEmail(),
                 user.getPassword(),
                 user.getRole(),
-                user.getCustomer()
+                user.getProfile()
 
         );
 

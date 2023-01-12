@@ -1,4 +1,4 @@
-package com.kitex.kitex.customer.entity;
+package com.kitex.kitex.profile.entity;
 
 import com.kitex.kitex.entity.BaseEntity;
 import com.kitex.kitex.user.entity.User;
@@ -13,8 +13,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "customers")
-public class Customer  extends BaseEntity {
+@Table(name = "profiles")
+public class Profile extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -23,8 +23,8 @@ public class Customer  extends BaseEntity {
 
     private String contactPhone;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "user_id")
+    @OneToOne(mappedBy = "profile")
     private User user;
+
 }
 

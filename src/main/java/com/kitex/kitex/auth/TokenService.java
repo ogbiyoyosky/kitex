@@ -25,7 +25,7 @@ public class TokenService {
         JwtClaimsSet claims = JwtClaimsSet.builder()
                 .issuer("self")
                 .issuedAt(now)
-                .expiresAt(now.plus(1, ChronoUnit.HOURS))
+                .expiresAt(now.plus(10, ChronoUnit.HOURS))
                 .subject(authentication.getName())
                 .claim("scope", scope)
                 .build();
@@ -34,7 +34,7 @@ public class TokenService {
 
     }
 
-    public Jwt valiateJwt (String token) throws JwtException {
+    public Jwt validateJwt (String token) throws JwtException {
         return this.decoder.decode(token);
     }
 

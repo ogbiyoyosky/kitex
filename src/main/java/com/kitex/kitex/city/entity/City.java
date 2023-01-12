@@ -1,6 +1,8 @@
 package com.kitex.kitex.city.entity;
 
 import com.kitex.kitex.entity.BaseEntity;
+import com.kitex.kitex.profile.entity.Profile;
+import com.kitex.kitex.restaurants.entity.Restaurant;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,5 +24,8 @@ public class City extends BaseEntity {
     private String cityName;
 
     private String postCode;
+
+    @OneToOne(mappedBy = "city")
+    private Restaurant restaurant;
 
 }

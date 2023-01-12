@@ -1,4 +1,4 @@
-package com.kitex.kitex.order;
+package com.kitex.kitex.order.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -16,7 +16,7 @@ public class Status {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Integer id;
 
     private String statusName;
 }

@@ -1,6 +1,6 @@
 package com.kitex.kitex.user.dto;
 
-import com.kitex.kitex.customer.entity.Customer;
+import com.kitex.kitex.profile.entity.Profile;
 import jakarta.validation.constraints.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +28,7 @@ public class UserDTO {
 
     @NotBlank(message = "role cannot be blank")
     private final String role;
+    
+    private final Profile profile;
 
-    private final Customer customer;
 }

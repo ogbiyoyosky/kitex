@@ -1,7 +1,7 @@
-package com.kitex.kitex.order;
+package com.kitex.kitex.order.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.kitex.kitex.customer.entity.Customer;
+import com.kitex.kitex.profile.entity.Profile;
 import com.kitex.kitex.entity.BaseEntity;
 import com.kitex.kitex.restaurants.entity.Restaurant;
 import jakarta.persistence.*;
@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -36,18 +37,23 @@ public class PlacedOrder  extends BaseEntity {
 
     private  float subTotal;
 
+    private String orderReference;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "restaurant_id" )
     private Restaurant restaurant;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id" )
-    private Customer customer;
+    @JoinColumn(name = "profile_id" )
+    private Profile profile;
 
     @ManyToOne
     @JoinColumn(name = "status_id" )
     private Status status;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "placedOrder", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<PlacedOrderItems> placedOrderItems;
 }
 
