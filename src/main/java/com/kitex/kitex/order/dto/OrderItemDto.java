@@ -14,5 +14,4 @@ public class OrderItemDto {
     private  Integer quantity;
     private  Integer itemId;
     private  Float itemPrice;
-
 }

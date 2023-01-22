@@ -1,7 +1,7 @@
 package com.kitex.kitex.menu.services;
 
 import com.kitex.kitex.menu.entity.MenuItem;
-import com.kitex.kitex.order.dto.CreateMenuDto;
+import com.kitex.kitex.menu.dto.CreateMenuDto;
 
 import java.util.List;
 

@@ -1,6 +1,7 @@
 package com.kitex.kitex.user.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.kitex.kitex.order.entity.PlacedOrder;
 import com.kitex.kitex.profile.entity.Profile;
 import com.kitex.kitex.entity.BaseEntity;
 import com.kitex.kitex.restaurants.entity.Restaurant;
@@ -39,5 +40,10 @@ public class User extends BaseEntity {
 
 	@OneToMany(mappedBy = "user")
 	private List<Restaurant> restaurants;
+
+	@OneToMany(mappedBy = "driver")
+	private List<PlacedOrder> orders;
+
+
 
 }

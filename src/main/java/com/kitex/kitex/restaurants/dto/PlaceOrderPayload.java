@@ -3,21 +3,20 @@ package com.kitex.kitex.restaurants.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
+@AllArgsConstructor
 @RequiredArgsConstructor
-@Data
+@Setter
 @Getter
 public class PlaceOrderPayload {
 
     @NotEmpty()
-    private final List<PlaceOrderItem> items;
+    private  List<PlaceOrderItem> items;
 
     @NotBlank(message = "deliveryAddress cannot be blank")
-    private final String deliveryAddress;
+    private  String deliveryAddress;
 }
 

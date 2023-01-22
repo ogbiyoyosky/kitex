@@ -41,7 +41,7 @@ public class AuthControllerIntegrationTests {
 
         // Send the POST request
         mockMvc
-                .perform(MockMvcRequestBuilders.post("/api/v1/auth/drivers")
+                .perform(MockMvcRequestBuilders.post("/api/auth/drivers")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json_ownerToCreate)
                         .accept(MediaType.APPLICATION_JSON))
@@ -63,7 +63,7 @@ public class AuthControllerIntegrationTests {
 
         // Send the POST request
         mockMvc
-                .perform(MockMvcRequestBuilders.post("/api/v1/auth/users")
+                .perform(MockMvcRequestBuilders.post("/api/auth/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json_ownerToCreate)
                         .accept(MediaType.APPLICATION_JSON))
@@ -87,7 +87,7 @@ public class AuthControllerIntegrationTests {
 
         // Send the POST request
         mockMvc
-                .perform(MockMvcRequestBuilders.post("/api/v1/auth/admins")
+                .perform(MockMvcRequestBuilders.post("/api/auth/admins")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json_ownerToCreate)
                         .accept(MediaType.APPLICATION_JSON))
@@ -109,7 +109,7 @@ public class AuthControllerIntegrationTests {
 
         // Send the POST request
         mockMvc
-                .perform(MockMvcRequestBuilders.post("/api/v1/auth/admins")
+                .perform(MockMvcRequestBuilders.post("/api/auth/admins")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json_userToCreate)
                         .accept(MediaType.APPLICATION_JSON));
@@ -120,7 +120,7 @@ public class AuthControllerIntegrationTests {
 
         // Send the POST request
         mockMvc
-                .perform(MockMvcRequestBuilders.post("/api/v1/auth/login")
+                .perform(MockMvcRequestBuilders.post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json_ownerLoginCreate)
                         .accept(MediaType.APPLICATION_JSON))

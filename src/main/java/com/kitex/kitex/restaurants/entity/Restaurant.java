@@ -43,4 +43,5 @@ public class Restaurant  extends BaseEntity {
     @JoinColumn(name = "city_id")
     private City city;
 
+
 }

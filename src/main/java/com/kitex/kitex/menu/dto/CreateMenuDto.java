@@ -1,7 +1,8 @@
-package com.kitex.kitex.order.dto;
+package com.kitex.kitex.menu.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 @Builder
@@ -19,10 +20,11 @@ public class CreateMenuDto {
     @NotBlank
     private  String ingredients;
 
+    private  Integer categoryId;
+
     @NotBlank
     private String recipe;
 
-    @NotBlank
-    @Min(1)
+
     private Float price;
 }

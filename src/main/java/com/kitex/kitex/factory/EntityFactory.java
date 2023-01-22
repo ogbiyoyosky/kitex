@@ -1,10 +1,11 @@
 package com.kitex.kitex.factory;
 
 import com.kitex.kitex.city.entity.City;
+import com.kitex.kitex.menu.entity.Category;
 import com.kitex.kitex.profile.dto.NewProfileDto;
 import com.kitex.kitex.profile.entity.Profile;
 import com.kitex.kitex.menu.entity.MenuItem;
-import com.kitex.kitex.order.dto.CreateMenuDto;
+import com.kitex.kitex.menu.dto.CreateMenuDto;
 import com.kitex.kitex.restaurants.dto.CreateRestaurantDto;
 import com.kitex.kitex.restaurants.entity.Restaurant;
 import com.kitex.kitex.user.entity.User;
@@ -24,6 +25,7 @@ public class EntityFactory
                 user.getPassword(),
                 role,
                 profile,
+                null,
                 null
         );
     }
@@ -51,7 +53,7 @@ public class EntityFactory
         );
     }
 
-    public MenuItem create(CreateMenuDto menu, Restaurant restaurant) {
+    public MenuItem create(CreateMenuDto menu, Restaurant restaurant, Category category) {
         return MenuItem.builder()
                 .id(0)
                 .description(menu.getDescription())
@@ -59,9 +61,11 @@ public class EntityFactory
                 .itemName(menu.getItemName())
                 .price(menu.getPrice())
                 .recipe(menu.getRecipe())
+                .category(category)
                 .restaurant(restaurant)
                 .build();
-
     }
+
+
 
 }

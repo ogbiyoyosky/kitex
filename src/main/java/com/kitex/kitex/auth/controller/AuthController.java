@@ -26,21 +26,16 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Validated
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
-
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
-
     @PostMapping(path = "/login")
     public  ResponseEntity<ResponseDto> authenticateUser(@Valid @RequestBody LoginDTO payload) throws Exception {
         try {
            Authentication authentication =  authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(payload.getEmail(),payload.getPassword())
            );
-
-            System.out.println("Authorities " + authentication.getAuthorities());
-
             Map<String, String> data = new HashMap<>();
             data.put("token",tokenService.generateToken(authentication));
             return Response.send("Successfully logged In",data,200, true);

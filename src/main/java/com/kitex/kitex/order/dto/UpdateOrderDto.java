@@ -1,21 +1,22 @@
 package com.kitex.kitex.order.dto;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Future;
-import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.Min;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Date;
 
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Setter
 @Getter
+@Setter
+@Builder
 public class UpdateOrderDto {
-
-    private Integer statusId;
-
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING ,pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone = "UTC")
     private String estimatedDeliveryTime;
+
+    @Min(1)
+    private  Integer statusId;
 }

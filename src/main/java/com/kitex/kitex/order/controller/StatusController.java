@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@PreAuthorize("hasAnyRole('KITCHEN_ADMIN', 'CUSTOMER','DRIVER')")
+@PreAuthorize("hasAnyAuthority('SCOPE_ROLE_KITCHEN_ADMIN', 'SCOPE_ROLE_CUSTOMER','SCOPE_ROLE_DRIVER')")
 @RequestMapping(path = "/api/v1/statuses")
 public class StatusController {
     private final StatusService statusService;

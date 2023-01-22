@@ -8,6 +8,7 @@ import com.kitex.kitex.exception.ConflictException;
 import com.kitex.kitex.exception.NotFoundException;
 import com.kitex.kitex.factory.EntityFactory;
 import com.kitex.kitex.user.dto.NewUserDTO;
+import com.kitex.kitex.user.dto.UserResponseDto;
 import com.kitex.kitex.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.management.relation.Role;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -85,8 +88,33 @@ public class UserService implements  IUserService {
         return user.get();
     }
 
+    public User findById(Integer userId) {
+        Optional<User> user = userRepository.findById(userId);
+
+        if (!user.isPresent()) {
+            throw new NotFoundException("User does not exist");
+        }
+        return user.get();
+    }
+
     private boolean emailAlreadyInUse(String email)
     {
         return userRepository.findByEmail(email).isPresent();
+    }
+
+    public List<UserResponseDto> fetchDriver() {
+        List<User> users = this.userRepository.findByRole("ROLE_DRIVER");
+        List<UserResponseDto> arrays = new ArrayList<>();
+
+        for ( User user : users) {
+            arrays.add(UserResponseDto.builder()
+                    .id(user.getId())
+                            .lastName(user.getLastName())
+                            .firstName(user.getFirstName())
+                            .email(user.getEmail())
+                    .build());
+        }
+
+        return arrays;
     }
 }

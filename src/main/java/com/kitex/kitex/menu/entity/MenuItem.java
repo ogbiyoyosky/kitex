@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.kitex.kitex.entity.BaseEntity;
 import com.kitex.kitex.order.entity.PlacedOrder;
 import com.kitex.kitex.order.entity.PlacedOrderItems;
+import com.kitex.kitex.profile.entity.Profile;
 import com.kitex.kitex.restaurants.entity.Restaurant;
 import jakarta.persistence.*;
 import lombok.*;
@@ -32,6 +33,10 @@ public class MenuItem extends BaseEntity {
     private String ingredients;
 
     private  String recipe;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "category_id")
+    private Category category;
 
     @ManyToOne
     @JoinColumn(name = "restaurant_id" )

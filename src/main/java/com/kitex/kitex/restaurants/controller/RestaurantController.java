@@ -31,15 +31,23 @@ public class RestaurantController {
 
     @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_KITCHEN_ADMIN','SCOPE_ROLE_CUSTOMER')")
     @GetMapping
-    public ResponseEntity<ResponseDto> getRestaurantsWithMenus(Principal principal) {
+    public ResponseEntity<ResponseDto> getRestaurants(Principal principal) {
         LOG.info("authenticated user {} ", principal);
         return Response.send("Successfully fetched restaurants",this.restaurantService.findRestaurants(),200, true);
     }
+
+    @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_KITCHEN_ADMIN','SCOPE_ROLE_CUSTOMER')")
+    @GetMapping(path="/{restaurantId}/menus" )
+    public ResponseEntity<ResponseDto> getRestaurantsWithMenus(Principal principal, @PathVariable Integer restaurantId) {
+        LOG.info("authenticated user {} ", principal);
+        return Response.send("Successfully fetched restaurants",this.restaurantService.getRestaurantWithMenus(restaurantId),200, true);
+    }
+
     @PostMapping
     @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_KITCHEN_ADMIN')")
     public ResponseEntity<ResponseDto> createRestaurant(Principal principal,@RequestBody CreateRestaurantDto payload) {
-        this.restaurantService.createRestaurant(payload,principal.getName());
-        return Response.send("Successfully created Restaurant",null,201, true);
+
+        return Response.send("Successfully created Restaurant", this.restaurantService.createRestaurant(payload,principal.getName()),201, true);
     }
     @DeleteMapping(path="/{restaurantId}" )
     @PreAuthorize("hasAnyAuthority('SCOPE_ROLE_KITCHEN_ADMIN')")

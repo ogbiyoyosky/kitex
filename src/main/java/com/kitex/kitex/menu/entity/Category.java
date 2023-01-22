@@ -1,6 +1,7 @@
 package com.kitex.kitex.menu.entity;
 
 import com.kitex.kitex.entity.BaseEntity;
+import com.kitex.kitex.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,4 +20,7 @@ public class Category extends BaseEntity {
     private int id;
 
     private String name;
+
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.PERSIST, mappedBy = "category")
+    private MenuItem menuItem;
 }

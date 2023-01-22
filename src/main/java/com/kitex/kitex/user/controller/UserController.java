@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RestController
 @Validated
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/auth")
 public class UserController
 {
       private static final Logger LOG = LoggerFactory.getLogger(UserController.class);
@@ -40,6 +40,12 @@ public class UserController
     public ResponseEntity<ResponseDto>  createAccountForDrivers(@Valid @RequestBody NewUserDTO payload)
     {
      return   Response.send("Successfully Created Account",dtoFactory.create(userService.createUser(payload, "ROLE_DRIVER")),201, true);
+    }
+
+    @GetMapping(path = "/drivers")
+    public ResponseEntity<ResponseDto>  getMappings()
+    {
+        return   Response.send("Successfully Fetch drivers",userService.fetchDriver(),200, true);
     }
 
     @PostMapping(path = "/admins")

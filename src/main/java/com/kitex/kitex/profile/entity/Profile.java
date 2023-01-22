@@ -23,7 +23,7 @@ public class Profile extends BaseEntity {
 
     private String contactPhone;
 
-    @OneToOne(mappedBy = "profile")
+    @OneToOne(orphanRemoval = true, cascade = CascadeType.PERSIST, mappedBy = "profile")
     private User user;
 
 }

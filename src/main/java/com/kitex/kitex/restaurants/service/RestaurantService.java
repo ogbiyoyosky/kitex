@@ -13,6 +13,8 @@ import com.kitex.kitex.order.entity.PlacedOrder;
 import com.kitex.kitex.order.service.IOrderService;
 import com.kitex.kitex.restaurants.dto.CreateRestaurantDto;
 import com.kitex.kitex.restaurants.dto.PlaceOrderPayload;
+import com.kitex.kitex.restaurants.dto.RestaurantResponseDto;
+import com.kitex.kitex.restaurants.dto.RestaurantWithMenusResponseDto;
 import com.kitex.kitex.restaurants.entity.Restaurant;
 import com.kitex.kitex.restaurants.repository.IRestaurantRepository;
 import com.kitex.kitex.user.UserService;
@@ -24,8 +26,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @RequiredArgsConstructor
 @Service
@@ -33,31 +34,35 @@ import java.util.Optional;
 @Slf4j
 public class RestaurantService implements  IRestaurantService {
     private final IRestaurantRepository restaurantRepository;
-
     private final IMenuRepository menuRepository;
-
     private final UserService userService;
-
     private final CityRepository cityRepository;
-
     @Lazy
     private  final IOrderService orderService;
     private final EntityFactory entityFactory;
-
-
     public Restaurant findRestaurantById(Integer restaurantId) {
         Optional<Restaurant> restaurant = this.restaurantRepository.findById(restaurantId);
-
         if(restaurant.isEmpty()) {
          throw new NotFoundException("Restaurant with id " + restaurantId + " not found");
         }
-
         return restaurant.get();
     }
 
+    public List<RestaurantResponseDto> findRestaurants() {
 
-    public List<Restaurant> findRestaurants() {
-        return this.restaurantRepository.findAll();
+        List<RestaurantResponseDto> response = new ArrayList<>();
+
+        List<Restaurant> restaurants = this.restaurantRepository.findAll();
+        for (Restaurant restaurant : restaurants) {
+            RestaurantResponseDto data = RestaurantResponseDto.builder()
+                    .id(restaurant.getId())
+                    .address(restaurant.getAddress())
+                    .name(restaurant.getName())
+                    .build();
+
+            response.add(data);
+        }
+        return response;
     }
 
     public PlacedOrder placeOrder(Integer restaurantId, PlaceOrderPayload payload, String userIdentifier) {
@@ -76,30 +81,41 @@ public class RestaurantService implements  IRestaurantService {
         return menuItem;
     }
 
-    public Restaurant createRestaurant(CreateRestaurantDto payload, String userIdentifier) {
+    public RestaurantResponseDto createRestaurant(CreateRestaurantDto payload, String userIdentifier) {
         log.info("user : {} ", userIdentifier);
         User user = userService.findByEmail(userIdentifier);
-
-        log.info("user1 : {} ", user);
-
         Optional<City> city = cityRepository.findById(payload.getCityId());
-
         if(city.isEmpty()) {
             throw new BadRequestException("Invalid city id");
         }
-        return this.restaurantRepository.save(entityFactory.create(payload, user, city.get()));
+        Restaurant restaurant = this.restaurantRepository.save(entityFactory.create(payload, user, city.get()));
+        return RestaurantResponseDto.builder()
+                .name(restaurant.getName())
+                .id(restaurant.getId())
+                .address(restaurant.getAddress())
+                .build();
     }
 
     public void  deleteRestaurant(String email ,Integer restaurantId) {
         User user = userService.findByEmail(email);
         Optional<Restaurant> restaurant = this.restaurantRepository.findById(restaurantId);
-
         if(user.getId() != restaurant.get().getUser().getId()) {
             throw new ForbiddenException("You don't have the permission to carry out this request");
         }
-
         this.restaurantRepository.delete(restaurant.get());
 
     }
 
+    public RestaurantWithMenusResponseDto getRestaurantWithMenus(Integer restaurantId) {
+        Optional<Restaurant> restaurant = this.restaurantRepository.findById(restaurantId);
+
+        RestaurantWithMenusResponseDto response = RestaurantWithMenusResponseDto
+                .builder()
+                .menus(restaurant.get().getMenuItems())
+                .name(restaurant.get().getName())
+                .address(restaurant.get().getAddress())
+                .id(restaurantId)
+                .build();
+        return response;
+    }
 }

@@ -3,7 +3,9 @@ package com.kitex.kitex.restaurant;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.kitex.kitex.auth.dto.DataDto;
 import com.kitex.kitex.auth.dto.JwtResponse;
+import com.kitex.kitex.menu.repository.IMenuRepository;
 import com.kitex.kitex.profile.repository.ProfileRepository;
+import com.kitex.kitex.restaurant.dto.RestaurantResponseDto;
 import com.kitex.kitex.restaurants.repository.IRestaurantRepository;
 import com.kitex.kitex.user.UserRepository;
 import org.junit.jupiter.api.Test;
@@ -33,6 +35,10 @@ public class RestaurantIntegerateTests {
     @Autowired
     private IRestaurantRepository restaurantRepository;
 
+    @Autowired
+    private IMenuRepository menuRepository;
+
+
     @Test
     public void CreateRestaurant() throws Exception {
 
@@ -46,7 +52,7 @@ public class RestaurantIntegerateTests {
 
         // Send the POST request
         mockMvc
-                .perform(MockMvcRequestBuilders.post("/api/v1/auth/admins")
+                .perform(MockMvcRequestBuilders.post("/api/auth/admins")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json_ownerToCreate)
                         .accept(MediaType.APPLICATION_JSON))
@@ -57,7 +63,7 @@ public class RestaurantIntegerateTests {
                 "\"password\": \"miracle123\"}";
 
         String response = mockMvc
-                .perform(MockMvcRequestBuilders.post("/api/v1/auth/login")
+                .perform(MockMvcRequestBuilders.post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json_ownerLoginCreate)
                         .accept(MediaType.APPLICATION_JSON))
@@ -84,20 +90,18 @@ public class RestaurantIntegerateTests {
                 .perform(MockMvcRequestBuilders.post("/api/restaurants")
                         .header("Authorization", "Bearer " + savedJwtToken)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(json_ownerLoginCreate)
+                        .content(json_ownerToCreateRestaurant)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
                 .andReturn()
                 .getResponse()
                 .getContentAsString();
-        this.profileRepository.deleteAll();
-        this.userRepository.deleteAll();
-        this.restaurantRepository.deleteAll();
 
+        this.restaurantRepository.deleteAll();
+        this.userRepository.deleteAll();
+        this.profileRepository.deleteAll();
 
     }
-
-
 
     @Test
     public void ListKitchens() throws Exception {
@@ -109,21 +113,19 @@ public class RestaurantIntegerateTests {
                 "\"phone\": \"08075662781\"," +
                 "\"address\": \"1 North street Staffordshire ST47FA\"}";
 
-
         // Send the POST request
         mockMvc
-                .perform(MockMvcRequestBuilders.post("/api/v1/auth/admins")
+                .perform(MockMvcRequestBuilders.post("/api/auth/admins")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json_ownerToCreate)
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
 
-
         String json_ownerLoginCreate = "{\"email\":\"nuel@nueljoe9.com\"," +
                 "\"password\": \"miracle123\"}";
 
         String response = mockMvc
-                .perform(MockMvcRequestBuilders.post("/api/v1/auth/login")
+                .perform(MockMvcRequestBuilders.post("/api/auth/login")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json_ownerLoginCreate)
                         .accept(MediaType.APPLICATION_JSON))
@@ -149,8 +151,93 @@ public class RestaurantIntegerateTests {
         this.userRepository.deleteAll();
         this.restaurantRepository.deleteAll();
 
+    }
 
+    @Test
+    public void createMenuForRestaurant() throws Exception {
+        String json_ownerToCreate = "{\"email\":\"nuel@nueljoe9.com\"," +
+                "\"password\": \"miracle123\"," +
+                "\"firstName\": \"Freeman\"," +
+                "\"lastName\": \"Joe\"," +
+                "\"phone\": \"08075662781\"," +
+                "\"address\": \"1 North street Staffordshire ST47FA\"}";
+
+
+        // Send the POST request
+        mockMvc
+                .perform(MockMvcRequestBuilders.post("/api/auth/admins")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json_ownerToCreate)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+
+
+        String json_ownerLoginCreate = "{\"email\":\"nuel@nueljoe9.com\"," +
+                "\"password\": \"miracle123\"}";
+
+        String response = mockMvc
+                .perform(MockMvcRequestBuilders.post("/api/auth/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json_ownerLoginCreate)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        ObjectMapper mapper = new ObjectMapper();
+        JwtResponse jwtResponse = mapper.readValue(response, JwtResponse.class);
+        String jwtToken = jwtResponse.getData().getToken();
+
+        // Save the token in a variable
+        String savedJwtToken = jwtToken;
+
+        System.out.println(savedJwtToken);
+
+        String json_ownerToCreateRestaurant = "{\"cityId\":1," +
+                "\"name\": \"EMBER LOUNGE\"," +
+                "\"address\": \"1 North street Staffordshire ST47FA\"}";
+
+
+        String restaurantResponseMvc = mockMvc
+                .perform(MockMvcRequestBuilders.post("/api/restaurants")
+                        .header("Authorization", "Bearer " + savedJwtToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(json_ownerToCreateRestaurant)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated())
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+
+        ObjectMapper restaurantMapper = new ObjectMapper();
+        RestaurantResponseDto restaurantResponse = restaurantMapper.readValue(restaurantResponseMvc, RestaurantResponseDto.class);
+        Integer id = restaurantResponse.getData().getId();
+
+        String crate_menu_item = "{\"itemName\":\"Hambuger\"," +
+                "\"description\": \"Bread and salad\"," +
+                "\"ingredients\": \"Bread and salad\"," +
+                "\"categoryId\": 1," +
+                "\"recipe\": \"Water yeast flour salt suger and butter\"," +
+                "\"price\": 100" + "}";
+
+          mockMvc
+                .perform(MockMvcRequestBuilders.post("/api/menus/resturants/" + id + "/create" )
+                        .header("Authorization", "Bearer " + savedJwtToken)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(crate_menu_item)
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+
+
+
+        this.menuRepository.deleteAll();
+        this.restaurantRepository.deleteAll();
+        this.userRepository.deleteAll();
+        this.profileRepository.deleteAll();
 
     }
+
+
 
 }

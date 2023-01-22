@@ -2,6 +2,7 @@ package com.kitex.kitex.order.dto;
 
 import com.kitex.kitex.profile.entity.Profile;
 import com.kitex.kitex.order.entity.PlacedOrderItems;
+import com.kitex.kitex.user.entity.User;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -18,7 +19,7 @@ public class OrderResponse {
     private LocalDateTime estimatedDeliveryTime;
     private Float price;
     private String orderReference;
-    private Profile profile;
+    private User user;
     private String address;
     private String status;
     private Set<PlacedOrderItems> orderItems;

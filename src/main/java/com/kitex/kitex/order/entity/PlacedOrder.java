@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kitex.kitex.profile.entity.Profile;
 import com.kitex.kitex.entity.BaseEntity;
 import com.kitex.kitex.restaurants.entity.Restaurant;
+import com.kitex.kitex.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,7 +21,6 @@ import java.util.Set;
 @Entity
 @Table(name = "placed_orders")
 public class PlacedOrder  extends BaseEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -45,8 +45,12 @@ public class PlacedOrder  extends BaseEntity {
     private Restaurant restaurant;
 
     @ManyToOne
-    @JoinColumn(name = "profile_id" )
-    private Profile profile;
+    @JoinColumn(name = "user_id" )
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "assigned_driver_id")
+    private User driver;
 
     @ManyToOne
     @JoinColumn(name = "status_id" )
